@@ -18,28 +18,36 @@ When writing the tests, mock both the Rocketship and Astronaut for the sake of p
 class LeagueOfAmazingAstronautsTest {
 
     LeagueOfAmazingAstronauts underTest = new LeagueOfAmazingAstronauts();
+    
+    @Mock
+    Rocketship rocket;
+    
+    @Mock
+    Astronaut astronaut;
 
     @BeforeEach
     void setUp() {
-
+    	MockitoAnnotations.openMocks(this);
     }
 
     @Test
     void itShouldPrepareAstronaut() {
         //given
-
+    	
         //when
-
+    	underTest.prepareAstronaut(astronaut);
         //then
+    	verify(rocket, times(1)).loadOccupant(astronaut);
     }
 
     @Test
     void itShouldLaunchRocket() {
         //given
-
+    	
         //when
-
+    	
         //then
+    	
     }
 
 
