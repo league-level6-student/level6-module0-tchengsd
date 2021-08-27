@@ -23,7 +23,7 @@ class MyDonutShopTest {
     
     @Mock
     PaymentService paymentService;
-
+    
     @Mock
     BakeryService bakeryService;
     
@@ -31,24 +31,29 @@ class MyDonutShopTest {
     void setUp() {
     	MockitoAnnotations.openMocks(this);
     	myDonutShop = new MyDonutShop(paymentService, deliveryService, bakeryService);
+    	myDonutShop.setDeliveryService(deliveryService);
+    	myDonutShop.setPaymentService(paymentService);
     }
-
+    
     @Test
     void itShouldTakeDeliveryOrder() throws Exception {
     	//given
-    	myDonutShop.openForTheDay();
-    	System.out.println(bakeryService.getDonutsRemaining());
     	Order order = new Order("Robert", "8675309", 1, 24.99, "5678 9456 2342 0690", true);
+    	when(paymentService.charge(order)).thenReturn(true);
+    	when(bakeryService.getDonutsRemaining()).thenReturn(20);
         //when
+    	myDonutShop.openForTheDay();
     	myDonutShop.takeOrder(order);
         //then
     	verify(deliveryService, times(1)).scheduleDelivery(order);
     }
-
+    
     @Test
     void givenInsufficientDonutsRemaining_whenTakeOrder_thenThrowIllegalArgumentException() {
         //given
     	Order order = new Order("Wario", "1021199200", 100, 100, "1992 0000 1021 0690", true);
+    	when(paymentService.charge(order)).thenReturn(true);
+    	when(bakeryService.getDonutsRemaining()).thenReturn(20);
         //when    	
     	myDonutShop.openForTheDay();
         //then
@@ -56,11 +61,13 @@ class MyDonutShopTest {
         assertEquals("Insufficient donuts remaining", exceptionThrown.getMessage());
         verify(bakeryService, never()).removeDonuts(100);
     }
-
+    
     @Test
     void givenNotOpenForBusiness_whenTakeOrder_thenThrowIllegalStateException(){
         //given
     	Order order = new Order("Robert", "8675309", 1, 24.99, "5678 9456 2342 0690", true);
+    	when(paymentService.charge(order)).thenReturn(true);
+    	when(bakeryService.getDonutsRemaining()).thenReturn(20);
         //when
     	myDonutShop.closeForTheDay();
         //then

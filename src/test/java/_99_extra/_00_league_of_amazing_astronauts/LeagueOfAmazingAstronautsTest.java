@@ -33,7 +33,7 @@ class LeagueOfAmazingAstronautsTest {
     @Test
     void itShouldPrepareAstronaut() {
         //given
-    	
+    	when(astronaut.isTrained()).thenReturn(true);
         //when
     	underTest.prepareAstronaut(astronaut);
         //then
