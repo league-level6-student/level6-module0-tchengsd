@@ -1,3 +1,4 @@
+
 package _03_intro_to_authenticated_APIs;
 
 import _03_intro_to_authenticated_APIs.data_transfer_objects.ApiExampleWrapper;
@@ -30,6 +31,7 @@ public class NewsApi {
     private WebClient webClient;
 
     public NewsApi() {
+    	
         //build the WebClient
         this.webClient = WebClient
                 .builder()

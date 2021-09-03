@@ -26,19 +26,35 @@ import static org.mockito.Mockito.*;
 class NewsApiTest {
 
     NewsApi newsApi;
+    
+    @Mock
+    WebClient webClient;
+    
+    @Mock
+    RequestHeadersUriSpec requestUri;
+    
+    @Mock
+    RequestHeadersSpec requestheaders;
+    
+    @Mock
+    ResponseSpec response;
 
     @BeforeEach
     void setUp() {
-
+    	MockitoAnnotations.openMocks(this);
+    	newsApi = new NewsApi();
+    	newsApi.setWebClient(webClient);
     }
 
     @Test
     void itShouldGetNewsStoryByTopic() {
         //given
-
+    	String topic = "Sports";
+    	//left off here
         //when
-
+    	ApiExampleWrapper temp = newsApi.getNewsStoryByTopic("Sports");
         //then
+    	
     }
 
     @Test
@@ -49,6 +65,4 @@ class NewsApiTest {
 
         //then
     }
-
-
 }

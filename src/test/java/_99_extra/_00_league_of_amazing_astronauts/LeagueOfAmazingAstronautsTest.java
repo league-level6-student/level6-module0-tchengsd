@@ -9,6 +9,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /*
@@ -28,6 +30,7 @@ class LeagueOfAmazingAstronautsTest {
     @BeforeEach
     void setUp() {
     	MockitoAnnotations.openMocks(this);
+    	underTest.setRocketship(rocket);
     }
 
     @Test
@@ -43,28 +46,33 @@ class LeagueOfAmazingAstronautsTest {
     @Test
     void itShouldLaunchRocket() {
         //given
-    	
+    	when(rocket.isLoaded()).thenReturn(true);
         //when
-    	
+    	underTest.launchRocket("Mars");
         //then
-    	
+    	verify(rocket, times(1)).launch();
     }
 
 
     @Test
     void itShouldThrowWhenDestinationIsUnknown() {
         //given
-
+    	when(rocket.isLoaded()).thenReturn(true);
         //when
         //then
+    	Throwable exceptionThrown = assertThrows(Exception.class, () -> underTest.launchRocket("Mira"));
+    	assertEquals("Destination is unavailable", exceptionThrown.getMessage());
+    	verify(rocket, never()).launch();
     }
 
     @Test
     void itShouldThrowNotLoaded() {
         //given
-
+    	when(rocket.isLoaded()).thenReturn(false);
         //when
         //then
-
+    	Throwable exceptionThrown = assertThrows(Exception.class, () -> underTest.launchRocket("Mars"));
+    	assertEquals("Rocketship is not loaded", exceptionThrown.getMessage());
+    	verify(rocket, never()).launch();
     }
 }
